@@ -8,6 +8,7 @@ var mysql = require("mysql");
 var indexRouter = require('./routes/index');
 var eventRouter = require('./routes/event');
 var userRouter = require('./routes/user');
+var photoRouter = require('./routes/photo');
 
 var app = express();
 
@@ -36,6 +37,7 @@ app.use(function(req, res, next){
 app.use('/', indexRouter);
 app.use('/api/event', eventRouter);
 app.use('/api/user', userRouter);
+app.use('/api/photo', photoRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

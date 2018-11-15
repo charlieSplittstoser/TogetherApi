@@ -1,10 +1,10 @@
 var express = require('express');
 var router = express.Router();
 
-/* Get event from eventId */
+/* Get photos by eventId */
 router.get('/:eventId', function(req, res, next) {
 	var eventId = req.params.eventId;
-	connection.query('SELECT * from Event WHERE id=' + eventId, function (error, results, fields) {
+	connection.query('SELECT * from Photos WHERE eventId=' + eventId, function (error, results, fields) {
 	  	if(error){
 	  		res.send(JSON.stringify({"status": 500, "error": error, "response": null})); 
 	  		//If there is error, we send the error in the error section with 500 status
@@ -15,10 +15,10 @@ router.get('/:eventId', function(req, res, next) {
   	});
 });
 
-/* Get event from creatorId */
-router.get('/:creatorId', function(req, res, next) {
-	var creatorId = req.params.creatorId;
-	connection.query('SELECT * from Event WHERE creatorId=' + creatorId, function (error, results, fields) {
+/* Get photo by photoId */
+router.get('/:photoId', function(req, res, next) {
+	var photoId = req.params.photoId;
+	connection.query('SELECT * from Photos WHERE id=' + photoId, function (error, results, fields) {
 	  	if(error){
 	  		res.send(JSON.stringify({"status": 500, "error": error, "response": null})); 
 	  		//If there is error, we send the error in the error section with 500 status
@@ -29,9 +29,9 @@ router.get('/:creatorId', function(req, res, next) {
   	});
 });
 
-/* Get all events */
+/* Get all photos */
 router.get('/', function(req, res, next) {
-	connection.query('SELECT * from Event', function (error, results, fields) {
+	connection.query('SELECT * from Photos', function (error, results, fields) {
 	  	if(error){
 	  		res.send(JSON.stringify({"status": 500, "error": error, "response": null})); 
 	  		//If there is error, we send the error in the error section with 500 status
