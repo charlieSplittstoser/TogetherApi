@@ -27,7 +27,7 @@ app.use(function(req, res, next){
 	global.connection = mysql.createConnection({
 		host     : 'localhost',
 		user     : 'root',
-		password : 'together',
+		password : 'together', 
 		port	 : '8889',
 		database : 'together_db'
 	});
