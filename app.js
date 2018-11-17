@@ -39,6 +39,7 @@ app.use('/api/event', eventRouter);
 app.use('/api/user', userRouter);
 app.use('/api/photo', photoRouter);
 
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
