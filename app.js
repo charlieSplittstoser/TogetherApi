@@ -1,4 +1,3 @@
-var connect = require('connect');
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -27,7 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 //Database connection
 app.use(function(req, res, next){
 	global.connection = mysql.createConnection({
-		host     : '10.0.0.40',
+		host     : '10.0.0.11',
 		user     : 'together',
 		password : 'together', 
 		port	 : '8889',
