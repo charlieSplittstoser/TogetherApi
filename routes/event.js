@@ -69,6 +69,26 @@ router.post('/',function(req,res){
 	});
 });
 
+// update event settings
+router.post('/updateEvent',function(req,res){
+	var creatorId = req.body.creatorId;
+
+  	connection.query('UPDATE Event SET title =\'' + req.body.title + '\', start_date=\'' + req.body.start_date + 
+  		'\', end_date=\'' + req.body.end_date + '\', location=\'' + req.body.location + '\', userId=' + req.body.creatorId +
+  		', description=\'' + req.body.description + '\', public=' + req.body.public + ', thumbnail=\'' + req.body.thumbnail +
+  		'\', WHERE id=' + req.body.id + '\';', 
+  	  function (error, results, fields) {
+
+	  	if(error){
+		  		res.send(JSON.stringify({"status": 500, "error": error, "response": null})); 
+		  		//If there is error, we send the error in the error section with 500 status
+			} else {
+				res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
+				//If there is no error, all is good and response is 200OK.
+		}
+	});
+});
+
 router.post('/invite',function(req,res){
 
 	var eventId = req.body.eventId;
