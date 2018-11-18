@@ -121,4 +121,36 @@ router.get('/userEvent/:userId',function(req,res){
 	});
 });
 
+/* Change Active event for user */
+router.put('/changeActiveEvent',function(req,res){
+	var activeEvent = req.body.activeEvent;
+	var userId = req.body.userId;
+
+	connection.query('SELECT * FROM User WHERE id=' + userId + ';',
+		function (error, results, fields) {
+			console.log("Test1");
+		if(error){
+				res.send(JSON.stringify({"status": 500, "error": error, "response": null})); 
+				//If there is error, we send the error in the error section with 500 status
+		} else {
+			console.log("Test0");
+			if (results[0] != null) {// if  user exists get the events
+				console.log("Test2");
+				connection.query('UPDATE User SET activeEvent=' + activeEvent + ' WHERE id=' + userId + ';', 
+				function (error, results, fields) {
+					if(error){
+						res.send(JSON.stringify({"status": 500, "error": error, "response": null}));
+						//If there is error, we send the error in the error section with 500 status
+					} else {
+						res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
+						//If there is no error, all is good and response is 200OK.
+					}
+				});
+			} else {// user doesn't exist
+				res.send(JSON.stringify({"status": 500, "error": null, "response": "No user exists with that userId."}));
+			}
+		}
+	});
+});
+
 module.exports = router;

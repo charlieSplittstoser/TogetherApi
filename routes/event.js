@@ -70,13 +70,12 @@ router.post('/',function(req,res){
 });
 
 // update event settings
-router.post('/updateEvent',function(req,res){
-	var creatorId = req.body.creatorId;
+router.put('/updateEvent',function(req,res){
 
   	connection.query('UPDATE Event SET title =\'' + req.body.title + '\', start_date=\'' + req.body.start_date + 
-  		'\', end_date=\'' + req.body.end_date + '\', location=\'' + req.body.location + '\', userId=' + req.body.creatorId +
+  		'\', end_date=\'' + req.body.end_date + '\', location=\'' + req.body.location + '\', creatorId=' + req.body.creatorId +
   		', description=\'' + req.body.description + '\', public=' + req.body.public + ', thumbnail=\'' + req.body.thumbnail +
-  		'\', WHERE id=' + req.body.id + '\';', 
+  		'\', eventCode=\'' + req.body.eventCode + '\' WHERE id=' + req.body.id + ';', 
   	  function (error, results, fields) {
 
 	  	if(error){
