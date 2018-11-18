@@ -93,4 +93,14 @@ router.post('/uploadPhoto',function(req,res){
 	});
 });
 
+router.post('/upload', function(req, res) {
+	console.log('lol');
+	var rawImg = req.body.image,
+	    base64Data = rawImg.replace(/^data:image\/png;base64,/, ''),
+	    dirpath = '/Users/Antonio/Desktop/TogetherApi/public'
+	    imageName = 'picture.png',
+	    imageLocation = dirpath + imageName;
+  	fs.writeFile(imageLocation, base64Data, 'base64', function(err) {});
+});
+
 module.exports = router;
