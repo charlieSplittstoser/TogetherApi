@@ -15,6 +15,8 @@ router.get('/:eventId', function(req, res, next) {
   	});
 });
 
+
+
 /* Get event from creatorId */
 router.get('/creator/:creatorId', function(req, res, next) {
 	var creatorId = req.params.creatorId;
@@ -134,6 +136,48 @@ connection.query('SELECT id FROM Event WHERE id=\'' + req.body.eventId + '\';',
 				res.send(JSON.stringify({"status": 200, "error": null, "response": "Event does not exist"}));
 			}
 		}
+	});
+});
+
+router.get('/testPermission/:eventId/:userId',function(req,res){
+	var eventId = req.params.eventId;
+	var userId = req.params.userId;
+
+	connection.query('SELECT * FROM Event WHERE id=' + eventId + ';',
+		function (error, results, fields) {
+		if(error){
+				res.send(JSON.stringify({"status": 500, "error": error, "response": null})); 
+				//If there is error, we send the error in the error section with 500 status
+		} else {
+
+			if (results[0] != null) {
+				if(results[0].public == true){// default access
+					res.send(JSON.stringify({"status": 200, "error": null, "response": "valid"}));
+					return;
+				}
+				// private must make another query to check
+
+
+				connection.query('SELECT * FROM UserEventMapping WHERE user_id=' + userId + ' AND event_id=' + eventId + ';', 
+				function (error, results, fields) {
+					if(error){
+						res.send(JSON.stringify({"status": 500, "error": error, "response": null})); 
+						//If there is error, we send the error in the error section with 500 status
+					} else {
+
+						if (results[0] != null && results[0] != undefined) 
+							res.send(JSON.stringify({"status": 200, "error": null, "response": "valid"})); // user is mapped to private event
+						else
+							res.send(JSON.stringify({"status": 401, "error": null, "response": "invalid"})); // user not invited to event
+
+						//If there is no error, all is good and response is 200OK.
+					}		
+				});
+			} else { // event doesn't exist
+				res.send(JSON.stringify({"status": 409, "error": null, "response": "Event does not exist"}));
+			}
+		}
+
 	});
 });
 
