@@ -10,6 +10,7 @@ var indexRouter = require('./routes/index');
 var eventRouter = require('./routes/event');
 var userRouter = require('./routes/user');
 var photoRouter = require('./routes/photo');
+var userEventMapRouter = require('./routes/userEventMap');
 
 var app = express();
 
@@ -39,7 +40,7 @@ app.use('/', indexRouter);
 app.use('/api/event', eventRouter);
 app.use('/api/user', userRouter);
 app.use('/api/photo', photoRouter);
-
+app.use('/api/userEventMap', userEventMapRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

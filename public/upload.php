@@ -14,10 +14,12 @@
         die("Connection failed: " . $conn->connect_error);
     } 
 
-    $sql = "SELECT * FROM Photos";
+    $sql = "SELECT MAX(id) FROM Photos";
     $result = $conn->query($sql);
 
-    $num = $result->num_rows + 1;
+    $row = $result->fetch_row();
+
+    $num = $row[0] + 1;
 
     $conn->close();
 
