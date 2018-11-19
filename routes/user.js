@@ -38,10 +38,10 @@ router.post('/login',function(req,res){
 			console.log(results[0]);
 			if (results[0] != null && results[0].password == req.body.password) {// check if there is a user returned and the password matches
 
-				res.send(JSON.stringify({"status": 200, "error": null, "response": "valid"}));
+				res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
 				//If there is no error, all is good and response is 200OK.
 			} else {// duplicate user trying to make account with user or the password is incorrect
-				res.send(JSON.stringify({"status": 500, "error": null, "response": "invalid"}));
+				res.send(JSON.stringify({"status": 500, "error": null, "response": ""}));
 			}
 		}
 	});
@@ -70,21 +70,26 @@ router.post('/addUser',function(req,res){
 	connection.query('SELECT * FROM User WHERE email=\'' + req.body.email + '\';',
 		function (error, results, fields) {
 		if(error){
+				console.log(1);
 				res.send(JSON.stringify({"status": 500, "error": error, "response": null})); 
 				//If there is error, we send the error in the error section with 500 status
 		} else {
-			if (results[0] == null) {// if no users exist with that email go ahead
+			console.log(results[0])
+			if (!results[0]) {// if no users exist with that email go ahead
 				connection.query('INSERT INTO User (name, password, email) VALUES(\'' + req.body.name + '\', \'' + req.body.password + '\', \'' + req.body.email + '\');', 
 				function (error, results, fields) {
 					if(error){
+						console.log(2);
 						res.send(JSON.stringify({"status": 500, "error": error, "response": null})); 
 						//If there is error, we send the error in the error section with 500 status
 					} else {
-						res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
+						var user = [{email: req.body.email, password: req.body.password, name: req.body.name, id: results.insertId}]
+						res.send(JSON.stringify({"status": 200, "error": null, "response": user}));
 						//If there is no error, all is good and response is 200OK.
 					}
 				});
 			} else {// duplicate user trying to make account with user
+				console.log(3);
 				res.send(JSON.stringify({"status": 500, "error": null, "response": "Another user has the same email address."}));
 			}
 		}
