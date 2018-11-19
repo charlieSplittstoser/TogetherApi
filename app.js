@@ -27,7 +27,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 //Database connection
 app.use(function(req, res, next){
 	global.connection = mysql.createConnection({
-		host     : '10.0.0.11',
+		host     : 'localhost',
 		user     : 'together',
 		password : 'together', 
 		port	 : '8889',
