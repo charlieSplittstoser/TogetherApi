@@ -39,34 +39,6 @@ connection.query('SELECT id FROM Event WHERE id=\'' + req.body.eventId + '\';',
 	});
 });
 
-/* Get all events for a user */
-router.get('/userEvent/:userId',function(req,res){
-	var userId = req.params.userId;
-
-	connection.query('SELECT * FROM User WHERE id=' + userId + ';',
-		function (error, results, fields) {
-		if(error){
-				res.send(JSON.stringify({"status": 500, "error": error, "response": null})); 
-				//If there is error, we send the error in the error section with 500 status
-		} else {
-			if (results[0] != null) {// if  user exists get the events
-				connection.query('SELECT event_id FROM UserEventMapping WHERE user_id=' + userId + ';', 
-				function (error, results, fields) {
-					if(error){
-						res.send(JSON.stringify({"status": 500, "error": error, "response": null}));
-						//If there is error, we send the error in the error section with 500 status
-					} else {
-						res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
-						//If there is no error, all is good and response is 200OK.
-					}
-				});
-			} else {// user doesn't exist
-				res.send(JSON.stringify({"status": 500, "error": null, "response": "No user exists with that userId."}));
-			}
-		}
-	});
-});
-
 router.post('/invite',function(req,res){
 	var eventId = req.body.eventId;
 	connection.query('SELECT id FROM User WHERE email=\'' + req.body.email + '\';',
@@ -85,6 +57,19 @@ router.post('/invite',function(req,res){
 					//If there is no error, all is good and response is 200OK.
 				}
 			});
+		}
+	});
+});
+
+router.delete('/', function(req, res) {
+	connection.query('DELETE FROM UserEventMapping WHERE user_id=' + req.body.user_id + ' AND event_id=' + req.body.event_id + ';',
+		function (error, results, fields) {
+		if(error){
+			res.send(JSON.stringify({"status": 500, "error": error, "response": null})); 
+			//If there is error, we send the error in the error section with 500 status
+		} else {
+			res.send(JSON.stringify({"status": 200, "error": null, "response": null}));
+			//If there is no error, all is good and response is 200OK.
 		}
 	});
 });
