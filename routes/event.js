@@ -15,8 +15,6 @@ router.get('/:eventId', function(req, res, next) {
   	});
 });
 
-
-
 /* Get event from creatorId */
 router.get('/creator/:creatorId', function(req, res, next) {
 	var creatorId = req.params.creatorId;
@@ -72,7 +70,7 @@ router.post('/',function(req,res){
 });
 
 // update event settings
-router.put('/updateEvent',function(req,res){
+router.put('/updateEvent',function(req,res) {
 
   	connection.query('UPDATE Event SET title =\'' + req.body.title + '\', start_date=\'' + req.body.start_date + 
   		'\', end_date=\'' + req.body.end_date + '\', location=\'' + req.body.location + '\', creatorId=' + req.body.creatorId +
@@ -84,7 +82,11 @@ router.put('/updateEvent',function(req,res){
 		  		res.send(JSON.stringify({"status": 500, "error": error, "response": null})); 
 		  		//If there is error, we send the error in the error section with 500 status
 			} else {
-				res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
+				var pub = req.body.public ? 1 : 0;
+				var event = [{id: req.body.id, title: req.body.title, eventCode: req.body.eventCode, description: req.body.description,
+							  location: req.body.location, creatorId: req.body.creatorId, start_date: req.body.start_date, end_date: req.body.end_date,
+							  public: pub, thumbnail: req.body.thumbnail}]
+				res.send(JSON.stringify({"status": 200, "error": null, "response": event}));
 				//If there is no error, all is good and response is 200OK.
 		}
 	});
@@ -107,7 +109,6 @@ router.get('/testPermission/:eventId/:userId',function(req,res){
 					return;
 				}
 				// private must make another query to check
-
 
 				connection.query('SELECT * FROM UserEventMapping WHERE user_id=' + userId + ' AND event_id=' + eventId + ';', 
 				function (error, results, fields) {
@@ -149,9 +150,11 @@ router.get('/userEvent/:userId',function(req,res){
 });
 
 router.delete('/:eventId', function(req, res) {
-	connection.query('DELETE FROM Event WHERE event_id=' + eventId + ';',
+	var eventId = req.params.eventId;
+	connection.query('DELETE FROM Event WHERE id=' + eventId + ';',
 		function (error, results, fields) {
 		if(error){
+			console.log(error);
 			res.send(JSON.stringify({"status": 500, "error": error, "response": null})); 
 			//If there is error, we send the error in the error section with 500 status
 		} else {
