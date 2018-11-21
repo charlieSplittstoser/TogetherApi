@@ -68,6 +68,7 @@ router.post('/login',function(req,res){
   	res.end("yes");
 });
 
+
 router.post('/uploadPhoto',function(req,res){
 	var creatorId = req.body.creatorId;
 
@@ -79,13 +80,16 @@ router.post('/uploadPhoto',function(req,res){
 		  		res.send(JSON.stringify({"status": 500, "error": error, "response": null})); 
 		  		//If there is error, we send the error in the error section with 500 status
 		} else {
+				var myId = results.insertId;
 	  			connection.query('UPDATE Photos SET path = \'image' + results.insertId + '.png\' ' + 'WHERE id=' + results.insertId + ';', 
 	  				function (error, results, fields) {
 						if(error){
 	  						res.send(JSON.stringify({"status": 500, "error": error, "response": null})); 
 	  						//If there is error, we send the error in the error section with 500 status
 	  					} else {
-  							res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
+	  						var photo = [{id: myId, eventId: req.body.eventId, userId: req.body.userId, path: 'image' + results.insertId + '.png', likes: 1, 
+	  									  location: req.body.location, date_created: req.body.date_created, caption: req.body.caption}]
+  							res.send(JSON.stringify({"status": 200, "error": null, "response": photo}));
   							//If there is no error, all is good and response is 200OK.
 	  					}
 					});

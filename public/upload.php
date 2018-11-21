@@ -23,10 +23,13 @@
 
     $conn->close();
 
-    $filename = "image" . $num . ".png";
+    
 
     // Get image string posted from Android App
     $base=$_REQUEST['image'];
+    $id =$_REQUEST['id'];
+
+    $filename = "image" . $id . ".png";
 
     // Decode Image
     $binary=base64_decode($base);
