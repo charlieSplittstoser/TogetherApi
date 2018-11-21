@@ -76,6 +76,7 @@ router.post('/uploadPhoto',function(req,res){
   	  function (error, results, fields) {
 
 	  	if(error){
+	  			console.log('What up');
 		  		res.send(JSON.stringify({"status": 500, "error": error, "response": null})); 
 		  		//If there is error, we send the error in the error section with 500 status
 		} else {
@@ -85,6 +86,7 @@ router.post('/uploadPhoto',function(req,res){
 	  						res.send(JSON.stringify({"status": 500, "error": error, "response": null})); 
 	  						//If there is error, we send the error in the error section with 500 status
 	  					} else {
+	  						console.log("Hi")
   							res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
   							//If there is no error, all is good and response is 200OK.
 	  					}
