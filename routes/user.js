@@ -128,4 +128,33 @@ router.put('/changeActiveEvent',function(req,res){
 	});
 });
 
+/* Add new user to event by email */
+router.post('/addUserToEvent',function(req,res){
+	var eventId = req.body.eventId;
+	var email = req.body.email;
+
+	connection.query('SELECT * FROM User WHERE email=\'' + email + '\';',
+		function (error, results, fields) {
+		if(error){
+				res.send(JSON.stringify({"status": 500, "error": error, "response": null})); 
+				//If there is error, we send the error in the error section with 500 status
+		} else {
+			if (results[0] != undefined) {// if user exists go ahead
+				connection.query('INSERT INTO UserEventMapping (event_id, user_id) VALUES(' + eventId + ', ' + results[0].id + ');', 
+				function (error, results, fields) {
+					if(error){
+						res.send(JSON.stringify({"status": 500, "error": error, "response": null})); 
+						//If there is error, we send the error in the error section with 500 status
+					} else {
+						res.send(JSON.stringify({"status": 200, "error": null, "response": null}));
+						//If there is no error, all is good and response is 200OK.
+					}
+				});
+			} else {// user doesn't exist
+				res.send(JSON.stringify({"status": 500, "error": null, "response": "User doesn't exist."}));
+			}
+		}
+	});
+});
+
 module.exports = router;
